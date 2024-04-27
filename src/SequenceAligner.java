@@ -124,15 +124,12 @@ public class SequenceAligner {
                 maxScore = Math.max(maxScore, deleteScore);
                 if(maxScore == matchScore){
                     direction = Direction.DIAGONAL;
-                    //need to update alignedx and alignedy here
                 }
                 else if(maxScore == insertScore){
                     direction = Direction.LEFT;
-                    //need to update alignedx and alignedy here
                 }
                 else {
                     direction = Direction.UP;
-                    //need to update alignedx and alignedy here
                 }
                 cache[i][j]  = new Result(maxScore, direction);
             }
@@ -160,21 +157,29 @@ public class SequenceAligner {
      * and m is the length of y.
      */
     private void traceback() {
+        alignedX = "";
+        alignedY = "";
         int currI = n;
         int currJ = m;
         Result currResult = cache[currI][currJ];
         while(currResult != cache[0][0]){
             currResult.markPath();
             if(currResult.getParent() == Direction.DIAGONAL){
+                alignedX = Character.toString(x.charAt(currI - 1)).concat(alignedX);
+                alignedY = Character.toString(y.charAt(currJ - 1)).concat(alignedY);
                 currI--;
                 currJ--;
                 currResult = cache[currI][currJ];
             }
             else if(currResult.getParent() == Direction.LEFT){
+                alignedX = Character.toString(Constants.GAP_CHAR).concat(alignedX);
+                alignedY = Character.toString(y.charAt(currJ - 1)).concat(alignedY);
                 currJ--;
                 currResult = cache[currI][currJ];
             }
             else if(currResult.getParent() == Direction.UP){
+                alignedX = Character.toString(x.charAt(currI - 1)).concat(alignedX);
+                alignedY = Character.toString(Constants.GAP_CHAR).concat(alignedY);
                 currI--;
                 currResult = cache[currI][currJ];
             }
