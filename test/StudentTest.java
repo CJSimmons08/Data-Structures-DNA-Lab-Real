@@ -15,6 +15,7 @@ public class StudentTest {
     empties();
     singletons();
     // your tests go here
+
   }
 
   @Test
@@ -78,6 +79,46 @@ public class StudentTest {
     assertTrue(sa.isAligned());
     assertEquals("ACGT", sa.getAlignedX());
     assertEquals("ACGT", sa.getAlignedY());
+  }
+
+  /*
+  * My Tests
+  */
+
+  @Test
+  public void oopsAllTheSame(){
+    SequenceAligner sa;
+    sa = new SequenceAligner("AAAA", "AAAA");
+    assertTrue(sa.isAligned());
+    assertEquals("AAAA", sa.getAlignedX());
+    assertEquals("AAAA", sa.getAlignedY());
+  }
+
+  @Test
+  public void smallSequence(){
+    SequenceAligner sa;
+    sa = new SequenceAligner("ATGC", "CGTA");
+    assertTrue(sa.isAligned());
+    assertEquals("ATG_C", sa.getAlignedX());
+    assertEquals("_CGTA", sa.getAlignedY());
+  }
+
+  @Test
+  public void mediumSequence(){
+    SequenceAligner sa;
+    sa = new SequenceAligner("ACGTACCGGGGTA", "ACCTGAACTGG");
+    assertTrue(sa.isAligned());
+    assertEquals("ACGT_ACCGGGGTA", sa.getAlignedX());
+    assertEquals("ACCTGAAC_TGG__", sa.getAlignedY());
+  }
+
+  @Test
+  public void largeSequence(){
+    SequenceAligner sa;
+    sa = new SequenceAligner("ACGTACCGGGGTAACGTACCGGGGTA", "ACCTGAACTGGACGTACCGGGGTA");
+    assertTrue(sa.isAligned());
+    assertEquals("ACGT_ACCGGGGTAACGTACCGGGGTA", sa.getAlignedX());
+    assertEquals("ACCTGAAC_TGG__ACGTACCGGGGTA", sa.getAlignedY());
   }
 
 }

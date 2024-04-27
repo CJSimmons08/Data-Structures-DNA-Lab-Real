@@ -101,11 +101,11 @@ public class SequenceAligner {
         cache[0][0] = new Result(0, Direction.NONE);
         /*Top Row*/
         for(int j = 1; j <= y.length(); j++){
-            cache[0][j] = new Result((j * -1), Direction.LEFT);
+            cache[0][j] = new Result((j * judge.getGapCost()), Direction.LEFT);
         }
         /*Left-most Column*/
         for(int i = 1; i <= x.length(); i++){
-            cache[i][0] = new Result((i * -1), Direction.UP);
+            cache[i][0] = new Result((i * judge.getGapCost()), Direction.UP);
         }
 
         /*

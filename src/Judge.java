@@ -59,7 +59,7 @@ public class Judge {
    * Returns the score associated with the two characters.
    */
   public int score(char a, char b) {
-    if(a == '_' || b == '_'){
+    if(a == Constants.GAP_CHAR || b == Constants.GAP_CHAR){
       return gapCost;
     }
     if(a == b){
