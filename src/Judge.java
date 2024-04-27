@@ -1,3 +1,5 @@
+import java.util.InputMismatchException;
+
 /**
  * This class is used to score alignments. 
  * 
@@ -57,7 +59,13 @@ public class Judge {
    * Returns the score associated with the two characters.
    */
   public int score(char a, char b) {
-    return 0;  // delete this line and add your code
+    if(a == '_' || b == '_'){
+      return gapCost;
+    }
+    if(a == b){
+      return matchCost;
+    }
+    return mismatchCost;
   }
   
   /**
@@ -66,6 +74,13 @@ public class Judge {
    * Returns the score associated with the two strings.
    */
   public int score(String s1, String s2) {
-    return 0;  // delete this line and add your code
+    int total = 0;
+    if(s1.length() != s2.length()){
+      throw new InputMismatchException();
+    }
+    for(int i = 0; i < s1.length(); i++){
+      total += score(s1.charAt(i), s2.charAt(i));
+    }
+    return total;
   }
 }
