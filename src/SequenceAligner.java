@@ -95,7 +95,48 @@ public class SequenceAligner {
      * operations have the same max score.
      */
     private void fillCache() {
-        // delete this line and add your code
+        /*
+        * Base Case Assignments
+        */
+        cache[0][0] = new Result(0, Direction.NONE);
+        /*Top Row*/
+        for(int j = 1; j <= y.length(); j++){
+            cache[0][j] = new Result((j * -1), Direction.LEFT);
+        }
+        /*Left-most Column*/
+        for(int i = 1; i <= x.length(); i++){
+            cache[i][0] = new Result((i * -1), Direction.UP);
+        }
+
+        /*
+        * Assignment Loop
+        */
+        for(int i = 1; i < cache.length; i++){
+            for(int j = 1; j < cache[0].length; j++){
+                int maxScore = 0;
+                Direction direction;
+                int matchScore = judge.score(x.charAt(i - 1), y.charAt(j - 1)) + cache[i - 1][j - 1].getScore();
+                int insertScore = judge.score(Constants.GAP_CHAR, y.charAt(j - 1)) + cache[i][j - 1].getScore();
+                int deleteScore = judge.score(x.charAt(i - 1), Constants.GAP_CHAR) + cache[i - 1][j].getScore();
+                //compares matchScore with insertScore, giving us the greater, or the score if they are same
+                maxScore = Math.max(matchScore, insertScore);
+                //then compares maxScore (now the greater of match and insert) with deleteScore
+                maxScore = Math.max(maxScore, deleteScore);
+                if(maxScore == matchScore){
+                    direction = Direction.DIAGONAL;
+                    //need to update alignedx and alignedy here
+                }
+                else if(maxScore == insertScore){
+                    direction = Direction.LEFT;
+                    //need to update alignedx and alignedy here
+                }
+                else {
+                    direction = Direction.UP;
+                    //need to update alignedx and alignedy here
+                }
+                cache[i][j]  = new Result(maxScore, direction);
+            }
+        }
     }
 
     /**
@@ -104,7 +145,7 @@ public class SequenceAligner {
      * find the result in O(1) time by looking in your cache.
      */
     public Result getResult(int i, int j) {
-        return null;  // delete this line and add your code
+        return cache[i][j];
     }
 
     /**
@@ -119,7 +160,27 @@ public class SequenceAligner {
      * and m is the length of y.
      */
     private void traceback() {
-        // delete this line and add your code
+        int currI = n;
+        int currJ = m;
+        Result currResult = cache[currI][currJ];
+        while(currResult != cache[0][0]){
+            currResult.markPath();
+            if(currResult.getParent() == Direction.DIAGONAL){
+                currI--;
+                currJ--;
+                currResult = cache[currI][currJ];
+            }
+            else if(currResult.getParent() == Direction.LEFT){
+                currJ--;
+                currResult = cache[currI][currJ];
+            }
+            else if(currResult.getParent() == Direction.UP){
+                currI--;
+                currResult = cache[currI][currJ];
+            }
+        }
+        //cache[0][0] *should* in theory always be the final result being marked
+        cache[0][0].markPath();
     }
 
     /**
